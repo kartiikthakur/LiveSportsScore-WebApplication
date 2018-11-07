@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 <link href=”//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css” rel=”stylesheet” />
@@ -25,31 +25,78 @@
                     <a
                      class="nav-item nav-link active" id="link_index" href="/index">Home <span class="sr-only">(current)</span></a>
                     <a class="nav-item nav-link" id="link_select" href="/select"> Favourite Team</a> 
-                    <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>  
+                    <!-- <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>   -->
+                    <div class="fb-login-button" data-max-rows="3" data-size="small" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false"></div>
 
                   </div>
                   </div>
                                              
                 </nav>
-                <h2 class="text-center">Hello Kartik</h2>   
+                
+                <div class="container">
                 <h1 class="text-center">Favourite team details</h1>
-                <table align="center">
-                  <tr>
-                    <th>Team Name</th>
-                    <th>Abbreviation</th>
-                  </tr>
-                  <tr th:each="user:${allUsers}"></tr>
-                    <td th:text ="${name}"></td>     
-                    <td th:text="${abbr}"></td>              
-                  </tr>
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <th scope="col"> Team Name</th>
+                      <th scope="col"> Team Abbreviation</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                  <tr th:each="names:${AllSelections}">
+                    <td th:text ="${names.name}">Team Name</td>
+                    <td th:text ="${names.Abbreviation}">Team Name</td>
+                  </tr>                         
+                </thead>
+                </tbody>
                 </table>
                           
 	  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    
     <script>
 
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/en_GB/sdk.js#xfbml=1&version=v3.2&appId=493635834466966&autoLogAppEvents=1';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+      
 
-    </script>
+            function statusChangeCallback(response) {
+              console.log('statusChangeCallback');
+              console.log(response);
+              if (response.status === 'connected') {
+                testAPI();
+              } else {
+                document.getElementById('status').innerHTML = 'Please log ' +
+                  'into this app.';
+              }
+            }
+          
+
+            function checkLoginState() {
+              FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+              });
+            }
+      
+            FB.getLoginStatus(function(response) {
+                statusChangeCallback(response);
+              });
+          
+
+            function testAPI() {
+              console.log('Welcome!  Fetching your information.... ');
+              FB.api('/me', function(response) {
+                console.log('Successful login for: ' + response.name);
+                document.getElementById('status').innerHTML =
+                  'Hello, ' + response.name + '!';
+              });
+            }
+      </script>
 </body>
 </html>

@@ -4,13 +4,24 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
 import java.util.HashMap; 
+import java.util.TreeMap;
 import java.util.Map; 
+import com.example.demo.User;
+import com.example.demo.UserRepository;
+import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+
 
 
 @Controller
 class genericCtrl{
+
+	@Autowired
+	private UserRepository userRepository;
 
 	@GetMapping("/index")
 	public ModelAndView renderIndex()
@@ -27,29 +38,46 @@ class genericCtrl{
 		
 	}
 
+	
+
 	@PostMapping("/index")
 	public ModelAndView saveStuff (@RequestParam String name)
 	{
 		ModelAndView n = new ModelAndView("index");
-		System.out.println(name);
-		String[] team = name.split(",");
-		
-		 Map<String, String> map = new HashMap<String, String>();
-    	map.put("Washington Wizards", "WW");
-    	map.put("Miami Heat", "MH");
-    	map.put("Los Angeles Clippers", "LAC");
-		for (int i=0;i<team.length;i++)
-		{
-		User teams = new User();
-		teams.setName(team[i]);
-		String Abb = map.get(team[i]);
-		teams.setEmail(Abb);
-		}
-		
-		n.addObject("name", name);
-		String abbr = map.get(name);
-		n.addObject("abbr",abbr);		
+		userRepository.deleteAll();		
+		String team[] = name.split(",");			
+		Map<String,String> TeamMap ;
+		List<Map<String,String>> All = new ArrayList<>();
+				
+		for(String string: team){
+			User teams = new User();
+			teams.setName(string);	
+				
+				switch (string){
+				case "Washington Wizards":
+				teams.setAbr("WW");
+				TeamMap = new TreeMap<>();
+				TeamMap.put("name","Washington Wizards");	
+				TeamMap.put("Abbreviation","WW");
+				All.add(TeamMap);
+				break;
+				case "Miami Heat":
+				teams.setAbr("MH");
+				TeamMap = new TreeMap<>();
+				TeamMap.put("name", "Miami Heat");	
+				TeamMap.put("Abbreviation","MH");
+				All.add(TeamMap);
+				break;
+				case "Los Angeles Clippers":
+				teams.setAbr("LAC");	
+				TeamMap = new TreeMap<>();			
+				TeamMap.put("name", "Los Angeles Clippers");	
+				TeamMap.put("Abbreviation","LAC");
+				All.add(TeamMap);
+				break;
+			}
+		}					
+		n.addObject("AllSelections", All);
 		return n;
 	}
-
 }
