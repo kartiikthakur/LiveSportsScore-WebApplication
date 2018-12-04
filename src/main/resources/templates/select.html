@@ -2,43 +2,77 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>   
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous"-->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/css/select2.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.6-rc.0/js/select2.min.js"></script>
 
-    <title>Sports Watch</title>
+    <title>Favourites</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
 
-    <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
-        <a class="navbar-brand" href="/index">
-            <img src="/Images/logo.png" width="30" height="30" alt="">
-          </a>
-          <a class="navbar-brand" href="#">Basketbuzz</a>
-          
-            
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-              <div class="navbar-nav">
-                 
-                <a
-                 class="nav-item nav-link " id="link_index" href="/index">Home <span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link active" id="link_select" href="/select"> Favourite Team</a>   
-
-              </div>
-              </div>
-                                             
-            </nav>               
+                <a class="navbar-brand" href="/index">
+                    <img src="Images/logo.png" width="30" height="30" alt="">
+                  </a>
+                  <a class="navbar-brand" href="#">Basketbuzz</a>
+                  
+                    
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                      <div class="navbar-nav">
+                         
+                        <a
+                         class="nav-item nav-link active" id="link_index" href="/index">Home <span class="sr-only">(current)</span></a>
+                        <a class="nav-item nav-link" id="link_select" href="/select"> Favourite Team</a> 
+                        <a class="nav-item nav-link" id="link_select" href="/teams"> Teams Information</a> 
+                        <a class="nav-item nav-link" id="link_ranking" href="/ranking"> Team Rankings</a> 
+                        <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Scoreboard</a> 
+                        <a class="nav-item nav-link" id="link_schedule" href="/schedule"> Daily Schedule</a> 
+                        <!-- <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>   -->
+                        <!-- <div class="fb-login-button" data-max-rows="3" data-size="small" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false"></div> -->
+    
+                      </div>
+                      </div>
+                                                 
+                    </nav>              
                 <form action="index" method="POST">
                     <label for="name">
                         Select your favourite teams
                         </label>
                     <div class="input-group mb-3">
                         <select class="js-example-basic-multiple" id="name" name="name" multiple="multiple" style="width:90%">
-                            <option value="Washington Wizards">Washington Wizards</option>
-                            <option value="Miami Heat">Miami Heat</option>
+                            <option value="Toronto Raptors">Toronto Raptors</option>
+                            <option value="Milwaukee Bucks">Milwaukee Bucks</option>
                             <option value="Los Angeles Clippers">Los Angeles Clippers</option>
+                            <option value="Denver Nuggets">Denver Nuggets</option>
+                            <option value="Oklahoma City Thunders">Oklahoma City Thunders</option>
+                            <option value="Golden State Warriors">Golden State Warriors</option>
+                            <option value="Detroit Pistons">Detroit Pistons</option>
+                            <option value="Philadelphia 76ers">Philadelphia 76ers</option>
+                            <option value="Memphis Grizzels">Memphis Grizzels</option>
+                            <option value="Indiana Pacers">Indiana Pacers</option>
+                            <option value="Portland Trail Blazers">Portland Trail Blazers</option>
+                            <option value="Los Angeles Lakers">Los Angeles Lakers</option>
+                            <option value="Boston Celtics">Boston Celtics</option>
+                            <option value="New Orleans Pelicans">New Orleans Pelicans</option>
+                            <option value="Charlotte Hornets">Charlotte Hornets</option>
+                            <option value="Dallas Mavericks">Dallas Mavericks</option>
+                            <option value="Minnesota Timberwolves">Minnesota Timberwolves</option>
+                            <option value="Orlando Magic">Orlando Magic</option>
+                            <option value="Utah Jazz">Utah Jazz</option>
+                            <option value="Houston Rockets">Houston Rockets</option>
+                            <option value="Sacramento Kings">Sacramento Kings</option>
+                            <option value="San Antonio Spurs">San Antonio Spurs</option>
+                            <option value="Miami Heat">Miami Heat</option>
+                            <option value="Washington Wizards">Washington Wizards</option>
+                            <option value="Brooklyn Nets">Brooklyn Nets</option>
+                            <option value="New York Knicks">New York Knicks</option>
+                            <option value="Chicago Bulls">Chicago Bulls</option>
+                            <option value="Atlanta Hawks">Atlanta Hawks</option>
+                            <option value="Cleveland Cavaliers">Cleveland Cavaliers</option>
+                            <option value="Phoenix Suns">Phoenix Suns</option>
+
                           </select>
                         
                         <div class="input-group-append">
@@ -50,9 +84,7 @@
     <script>
         $(document).ready(function() {
        $('.js-example-basic-multiple').select2();
-       });
-          
-        
+       });       
        </script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
