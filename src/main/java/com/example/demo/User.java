@@ -16,7 +16,8 @@ public class User {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String name;
-    private String abr;
+	private String abr;
+	private String fbid;
 
 	public Integer getId() {
 		return id;
@@ -41,6 +42,14 @@ public class User {
 	public void setAbr(String abr) {
 		this.abr = abr;
 	}
+
+	public String getFbid() {
+		return fbid;
+	}
+
+	public void setFbid(String fbid) {
+		this.fbid = fbid;
+    }
     
     
 }

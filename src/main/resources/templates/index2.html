@@ -1,0 +1,60 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+<link href=”//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css” rel=”stylesheet” />
+<script src=”//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js”></script>
+    <title>Sports Watch</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+</head>
+<body>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+                
+            <a class="navbar-brand" href="/index">
+                <img src="Images/logo.png" width="30" height="30" alt="">
+              </a>
+              <a class="navbar-brand" href="#">Basketbuzz</a>
+              
+                
+                <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                  <div class="navbar-nav">
+                     
+                    <a
+                     class="nav-item nav-link active" id="link_index" href="/index">Home <span class="sr-only">(current)</span></a>
+                    <a class="nav-item nav-link" id="link_select" href="/select"> Favourite Team</a> 
+                    <a class="nav-item nav-link" id="link_select" href="/teams"> Teams Information</a> 
+                    <a class="nav-item nav-link" id="link_ranking" href="/ranking"> Team Rankings</a> 
+                    <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Scoreboard</a> 
+                    <a class="nav-item nav-link" id="link_schedule" href="/schedule"> Daily Schedule</a> 
+                    <!-- <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>   -->
+                    <!-- <div class="fb-login-button" data-max-rows="3" data-size="small" data-button-type="login_with" data-show-faces="true" data-auto-logout-link="true" data-use-continue-as="false"></div> -->
+
+                  </div>
+                  </div>
+                                             
+                </nav>
+                
+                <div class="container">
+                <h1 class="text-center">Favourite team details</h1>
+                <table class="table">
+                    <thead>
+                    <tr>
+                      <th scope="col">Team Abbreviation</th>
+                      <th scope="col">Team Name</th>
+                     
+                    </tr>
+                  </thead>
+                  
+                    <tr th:each="user : ${users}" >
+                     <td th:text="${user.abr}">
+                     <td th:text="${user.name}">
+                            
+                          </tr>
+                          </tr>
+                    </table>
+                          
+	  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>

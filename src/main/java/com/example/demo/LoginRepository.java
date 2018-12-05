@@ -13,7 +13,7 @@ import com.example.demo.Login;
 public interface LoginRepository extends CrudRepository<Login, Integer> {
 @Transactional
 @Modifying
-@Query("select count(*) from Login where fbid=:userID")
-public int findCount(@Param("userID") String userID);
+@Query("select count(*) from Login where fbid=:fbid")
+public int findCount(@Param("fbid") String fbid);
 
 }

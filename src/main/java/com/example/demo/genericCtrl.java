@@ -62,11 +62,57 @@ class genericCtrl{
 		return m;
 	}
 
-		@GetMapping("/select")
-		public String renderSelect() {
-			return "select";
+	// 	@GetMapping("/select")
+	// 	public String renderSelect() {
+	// 		return "select";
 		
-	}
+	// }
+
+	@GetMapping("/select")
+	 	public ModelAndView renderSelect(HttpSession session) {
+		ModelAndView select = new ModelAndView("select");
+		ModelAndView teamInfo = new ModelAndView("teamInfo");
+		ArrayList<HashMap<String, String>> gameDetails = new ArrayList<HashMap<String, String>>();
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/overall_team_standings.json";
+		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
+        
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", "Basic "+encoding);
+		HttpEntity<String> request = new HttpEntity<String>(headers);
+
+		
+		
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+		String str = response.getBody(); 
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode root = mapper.readTree(str);
+	        JsonNode gamelogs = root.get("overallteamstandings").get("teamstandingsentry");
+	        
+	        if(gamelogs.isArray()) {
+	        	
+	        	gamelogs.forEach(gamelog -> {
+	        		JsonNode game = gamelog.get("team");
+	        		HashMap<String,String> gameDetail = new HashMap<String, String>();
+	        		gameDetail.put("City", game.get("City").asText());
+					gameDetail.put("Name", game.get("Name").asText());					
+					gameDetail.put("Abbreviation", game.get("Abbreviation").asText());
+	        		gameDetails.add(gameDetail);
+	        		
+	        	});
+	        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	 
+		select.addObject("gameDetails", gameDetails);
+		
+        
+		return select;
+		
+	 }
 
 	@GetMapping("/admin")
 		public ModelAndView renderAdmin(HttpSession session) {
@@ -79,233 +125,38 @@ class genericCtrl{
 			return admin;				
 	}
 
-	
-
 	@PostMapping("/index")
-	public ModelAndView saveStuff (@RequestParam String name)
+	public ModelAndView saveStuff (@RequestParam String name, HttpSession session)
 	{
-		ModelAndView n = new ModelAndView("index");	
-		userRepository.deleteAll();
-		String team[] = name.split(",");			
+		String userID;
+		try{
+			userID= session.getAttribute("userID").toString();
+		} catch(Exception e){
+			ModelAndView login = new ModelAndView("redirect:/login");
+			return login;
+		}
+		ModelAndView index = new ModelAndView("index");	
 		Map<String,String> TeamMap ;
 		List<Map<String,String>> All = new ArrayList<>();
-				
+        session.setAttribute("userID", userID);
+		String team[] = name.split(",");
 		for(String string: team){
-			User teams = new User();
-			teams.setName(string);	
-				
-				switch (string){
-				case "Washington Wizards":
-				teams.setAbr("WW");
-				TeamMap = new TreeMap<>();
-				TeamMap.put("name","Washington Wizards");	
-				TeamMap.put("Abbreviation","WW");
-				All.add(TeamMap);
-				break;
-				case "Miami Heat":
-				teams.setAbr("MH");
-				TeamMap = new TreeMap<>();
-				TeamMap.put("name", "Miami Heat");	
-				TeamMap.put("Abbreviation","MH");
-				All.add(TeamMap);
-				break;
-				case "Los Angeles Clippers":
-				teams.setAbr("LAC");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Los Angeles Clippers");	
-				TeamMap.put("Abbreviation","LAC");
-				All.add(TeamMap);
-				break;
-				case "Toronto Raptors":
-				teams.setAbr("TOR");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Toronto Raptors");	
-				TeamMap.put("Abbreviation","TOR");
-				All.add(TeamMap);
-				break;
-				case "Milwaukee Bucks":
-				teams.setAbr("MIL");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Milwaukee Bucks");	
-				TeamMap.put("Abbreviation","MIL");
-				All.add(TeamMap);
-				break;
-				case "Denver Nuggets":
-				teams.setAbr("DEN");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Denver Nuggets");	
-				TeamMap.put("Abbreviation","DEN");
-				All.add(TeamMap);
-				break;
-				case "Oklahoma City Thunders":
-				teams.setAbr("OKL");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Oklahoma City Thunders");	
-				TeamMap.put("Abbreviation","OKL");
-				All.add(TeamMap);
-				break;
-				case "Golden State Warriors":
-				teams.setAbr("GSW");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Golden State Warriors");	
-				TeamMap.put("Abbreviation","GSW");
-				All.add(TeamMap);
-				break;
-				case "Detroit Pistons":
-				teams.setAbr("DET");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Detroit Pistons");	
-				TeamMap.put("Abbreviation","DET");
-				All.add(TeamMap);
-				break;
-				case "Philadelphia 76ers":
-				teams.setAbr("PHI");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Philadelphia 76ers");	
-				TeamMap.put("Abbreviation","PHI");
-				All.add(TeamMap);
-				break;
-				case "Memphis Grizzels":
-				teams.setAbr("MEM");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Memphis Grizzels");	
-				TeamMap.put("Abbreviation","MEM");
-				All.add(TeamMap);
-				break;
-				case "Indiana Pacers":
-				teams.setAbr("IND");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Indiana Pacers");	
-				TeamMap.put("Abbreviation","IND");
-				All.add(TeamMap);
-				break;
-				case "Portland Trail Blazers":
-				teams.setAbr("POR");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Portland Trail Blazers");	
-				TeamMap.put("Abbreviation","POR");
-				All.add(TeamMap);
-				break;
-				case "Los Angeles Lakers":
-				teams.setAbr("LAL");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Los Angeles Lakers");	
-				TeamMap.put("Abbreviation","LAL");
-				All.add(TeamMap);
-				break;
-				case "Boston Celtics":
-				teams.setAbr("BOS");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Boston Celtics");	
-				TeamMap.put("Abbreviation","BOS");
-				All.add(TeamMap);
-				break;
-				case "New Orleans Pelicans":
-				teams.setAbr("NOP");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "New Orleans Pelicans");	
-				TeamMap.put("Abbreviation","NOP");
-				All.add(TeamMap);
-				break;
-				case "Charlotte Hornets":
-				teams.setAbr("CHA");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Charlotte Hornets");	
-				TeamMap.put("Abbreviation","CHA");
-				All.add(TeamMap);
-				break;
-				case "Dallas Mavericks":
-				teams.setAbr("DAL");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Dallas Mavericks");	
-				TeamMap.put("Abbreviation","DAL");
-				All.add(TeamMap);
-				break;
-				case "Minnesota Timberwolves":
-				teams.setAbr("MIN");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Minnesota Timberwolves");	
-				TeamMap.put("Abbreviation","MIN");
-				All.add(TeamMap);
-				break;
-				case "Orlando Magic":
-				teams.setAbr("ORL");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Orlando Magic");	
-				TeamMap.put("Abbreviation","ORL");
-				All.add(TeamMap);
-				break;
-				case "Utah Jazz":
-				teams.setAbr("UTA");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Utah Jazz");	
-				TeamMap.put("Abbreviation","UTA");
-				All.add(TeamMap);
-				break;
-				case "Houston Rockets":
-				teams.setAbr("HOU");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Houston Rockets");	
-				TeamMap.put("Abbreviation","HOU");
-				All.add(TeamMap);
-				case "Sacramento Kings":
-				teams.setAbr("SAC");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Sacramento Kings");	
-				TeamMap.put("Abbreviation","SAC");
-				All.add(TeamMap);
-				case "San Antonio Spurs":
-				teams.setAbr("SAS");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "San Antonio Spurs");	
-				TeamMap.put("Abbreviation","SAS");
-				All.add(TeamMap);
-				case "Brooklyn Nets":
-				teams.setAbr("BRO");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Brooklyn Nets");	
-				TeamMap.put("Abbreviation","BRO");
-				All.add(TeamMap);
-				case "New York Knicks":
-				teams.setAbr("NYK");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "New York Knicks");	
-				TeamMap.put("Abbreviation","NYK");
-				All.add(TeamMap);
-				case "Chicago Bulls":
-				teams.setAbr("CHI");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Chicago Bulls");	
-				TeamMap.put("Abbreviation","CHI");
-				All.add(TeamMap);
-				break;
-				case "Atlanta Hawks":
-				teams.setAbr("ATL");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Atlanta Hawks");	
-				TeamMap.put("Abbreviation","ATL");
-				All.add(TeamMap);
-				break;
-				case "Cleveland Cavaliers":
-				teams.setAbr("CLE");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Cleveland Cavaliers");	
-				TeamMap.put("Abbreviation","CLE");
-				All.add(TeamMap);
-				break;
-				case "Phoenix Suns":
-				teams.setAbr("PHX");	
-				TeamMap = new TreeMap<>();			
-				TeamMap.put("name", "Phoenix Suns");	
-				TeamMap.put("Abbreviation","PHX");
-				All.add(TeamMap);
-				break;
-			}
-			userRepository.save(teams);
-		}					
-		n.addObject("AllSelections", All);
-		return n;
+		String split[] = string.split(":");
+		User teams = new User();
+		teams.setName(split[0]);
+		teams.setAbr(split[1]);
+		teams.setFbid(userID);
+		TeamMap = new TreeMap<>();
+ 		TeamMap.put("name",split[0]);	
+	 	TeamMap.put("Abbreviation",split[1]);
+		All.add(TeamMap);
+		userRepository.save(teams);
+		}		
+		index.addObject("AllSelections", All);
+		return index;		
 	}
+
+
 
 	//Using PoJo Classes
 	@GetMapping("/teams")
@@ -349,7 +200,7 @@ class genericCtrl{
 
 
 		//Endpoint to call
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nhl/2018-2019-regular/overall_team_standings.json";
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/overall_team_standings.json";
 		//Encode Username and Password
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
 		// TOKEN:PASS
@@ -377,7 +228,7 @@ class genericCtrl{
 		ModelAndView scoreboard = new ModelAndView("scoreboard");
 		scoreboard.addObject("name", "Kartik");
 		ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nhl/2018-2019-regular/scoreboard.json?fordate=20181025";
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181025";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
@@ -480,7 +331,7 @@ class genericCtrl{
 		ModelAndView schedule = new ModelAndView("schedule");
 		schedule.addObject("name", "Kartik");
 		ArrayList<HashMap<String, String>> scheduleDetails = new ArrayList<HashMap<String, String>>();
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nhl/2018-2019-regular/daily_game_schedule.json?fordate=20181114";
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/daily_game_schedule.json?fordate=20181114";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
@@ -530,22 +381,21 @@ public ModelAndView handleLogin(
     @RequestParam("userID") String userID,
     @RequestParam("userName") String userName, HttpSession session
     ) {
-        System.out.println(userID + userName);
         session.setAttribute("userID", userID);
         Login user = new Login();
         user.setFbid(userID);
 		user.setName(userName);
 		// int count = loginRepositoryy.findCount(userID);
         // if(count==0){
-			loginRepositoryy.save(user);
+		// 	loginRepositoryy.save(user);
 		// 	System.out.println(1);
 		// }
 		
-		if (userID.equals("1762276433882018"))	{
+		if (userID.equals("1762276433882018f"))	{
 			return new ModelAndView("redirect:/admin");
 
 		}	else{
-		return new ModelAndView("redirect:/index");
+		return new ModelAndView("redirect:/index2");
 		}
 	}
 	
@@ -564,6 +414,24 @@ public ModelAndView handleLogin(
 			return admin;			
 
 			}
+
+			@GetMapping("/index2")
+			public ModelAndView getFav(HttpSession session)
+			 {
+				 String userID= session.getAttribute("userID").toString();
+				System.out.println(userID);
+				ModelAndView index = new ModelAndView("index2");
+				 List<User> users = new ArrayList<User>();
+				 for(User user : userRepository.findByfbid(userID)){
+					 users.add(user);
+				 }
+				 index.addObject("users",users);
+				 System.out.println(users);
+			return index;			
+
+			}
+
+			
 
 	
 }
