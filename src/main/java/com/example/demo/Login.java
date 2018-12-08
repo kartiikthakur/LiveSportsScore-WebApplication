@@ -16,7 +16,8 @@ public class Login {
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id;
     private String fbid;
-    private String name;
+		private String name;
+
 
     public Integer getId() {
 		return id;
@@ -41,4 +42,5 @@ public class Login {
 	public void setName(String name) {
 		this.name = name;
 	}
+
 }

@@ -11,9 +11,6 @@ import com.example.demo.Login;
 // CRUD refers Create, Read, Update, Delete
 
 public interface LoginRepository extends CrudRepository<Login, Integer> {
-@Transactional
-@Modifying
-@Query("select count(*) from Login where fbid=:fbid")
-public int findCount(@Param("fbid") String fbid);
+long countByfbid(String fbid);
 
 }

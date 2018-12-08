@@ -9,6 +9,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.util.Collections;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
+import javax.servlet.SessionCookieConfig;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpEntity;
@@ -64,18 +68,34 @@ class genericCtrl{
 
 	// 	@GetMapping("/select")
 	// 	public String renderSelect() {
-	// 		return "select";
-		
+	// 		return "select";		
 	// }
+
+
+
+	@GetMapping("/logout")
+	public ModelAndView renderLogout(HttpSession session)
+	{
+		ModelAndView logout = new ModelAndView("logoutindex");
+		return logout;
+	}
+
+
 
 	@GetMapping("/select")
 	 	public ModelAndView renderSelect(HttpSession session) {
+			String userID;
+			try{
+				userID= session.getAttribute("userID").toString();
+				System.out.println(userID);
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
 		ModelAndView select = new ModelAndView("select");
 		ModelAndView teamInfo = new ModelAndView("teamInfo");
 		ArrayList<HashMap<String, String>> gameDetails = new ArrayList<HashMap<String, String>>();
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/overall_team_standings.json";
-		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
-        
+		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());        
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Basic "+encoding);
@@ -107,16 +127,24 @@ class genericCtrl{
 			e.printStackTrace();
 		}
 	 
-		select.addObject("gameDetails", gameDetails);
-		
-        
+		select.addObject("gameDetails", gameDetails);       
 		return select;
 		
 	 }
 
 	@GetMapping("/admin")
 		public ModelAndView renderAdmin(HttpSession session) {
+			String userID;
+			String userName;
+		try{
+			userID= session.getAttribute("userID").toString();
+			userName= session.getAttribute("userName").toString();
+
+		} catch(Exception e){
+			return new ModelAndView("redirect:/login");			
+		}
 			ModelAndView admin = new ModelAndView("admin");
+			admin.addObject("name", userName);
 				List<Login> users = new ArrayList<Login>();
 				for(Login user : loginRepositoryy.findAll()) {
 					users.add(user);
@@ -141,27 +169,39 @@ class genericCtrl{
         session.setAttribute("userID", userID);
 		String team[] = name.split(",");
 		for(String string: team){
-		String split[] = string.split(":");
-		User teams = new User();
+		String split[] = string.split("-");
+		long count = userRepository.findTeamCount(userID,split[1]);
+
+		User teams = null;
+		if (count == 0){
+		teams = new User();
 		teams.setName(split[0]);
 		teams.setAbr(split[1]);
-		teams.setFbid(userID);
+		teams.setFbid(userID);		
 		TeamMap = new TreeMap<>();
  		TeamMap.put("name",split[0]);	
 	 	TeamMap.put("Abbreviation",split[1]);
 		All.add(TeamMap);
 		userRepository.save(teams);
+		}
 		}		
 		index.addObject("AllSelections", All);
-		return index;		
+		return new ModelAndView("redirect:/index2");	
 	}
 
 
 
 	//Using PoJo Classes
 	@GetMapping("/teams")
-	public ModelAndView getTeams() {
-		//public ModelAndView getTeams(HttpSession session) {
+	//public ModelAndView getTeams() {
+		public ModelAndView getTeams(HttpSession session) {
+			String userID;
+			try{
+				userID= session.getAttribute("userID").toString();
+				System.out.println(userID);
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
 
 	
 		ModelAndView showTeams = new ModelAndView("showTeams");
@@ -195,6 +235,13 @@ class genericCtrl{
 	//Using PoJo Classes
 	@GetMapping("/ranking")
 	public ModelAndView getRanks(HttpSession session) {
+		String userID;
+			try{
+				userID= session.getAttribute("userID").toString();
+				System.out.println(userID);
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
 		ModelAndView ranks = new ModelAndView("ranking");
 		ranks.addObject("name", "Kartik");
 
@@ -224,6 +271,12 @@ class genericCtrl{
 	//Using objectMapper
 	@GetMapping("/scoreboard")
 	public ModelAndView getScoreInfo(HttpSession session){
+		String userID;
+			try{
+				userID= session.getAttribute("userID").toString();
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
 			
 		ModelAndView scoreboard = new ModelAndView("scoreboard");
 		scoreboard.addObject("name", "Kartik");
@@ -304,13 +357,20 @@ class genericCtrl{
 	        if(gamelogs.isArray()) {
 	        	
 	        	gamelogs.forEach(gamelog -> {
-	        		JsonNode game = gamelog.get("game");
+					JsonNode game = gamelog.get("game");
+					JsonNode stats = gamelog.get("stats");
 	        		HashMap<String,String> gameDetail = new HashMap<String, String>();
 	        		gameDetail.put("id", game.get("id").asText());
 	        		gameDetail.put("date", game.get("date").asText());
 					gameDetail.put("time", game.get("time").asText());
 					gameDetail.put("location", game.get("location").asText());
-	        		gameDetail.put("awayTeam", game.get("awayTeam").get("Abbreviation").asText());
+					gameDetail.put("awayTeam", game.get("awayTeam").get("Abbreviation").asText());
+					gameDetail.put("wins", stats.get("Wins").get("#text").asText());
+					gameDetail.put("losses", stats.get("Losses").get("#text").asText());
+					gameDetail.put("winpct", stats.get("WinPct").get("#text").asText());
+
+
+					
 	        		gameDetails.add(gameDetail);
 	        		
 	        	});
@@ -328,6 +388,13 @@ class genericCtrl{
 	//Using objectMapper
 	@GetMapping("/schedule")
 	public ModelAndView getSchedule(HttpSession session) { 
+		String userID;
+			try{
+				userID= session.getAttribute("userID").toString();
+				System.out.println(userID);
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
 		ModelAndView schedule = new ModelAndView("schedule");
 		schedule.addObject("name", "Kartik");
 		ArrayList<HashMap<String, String>> scheduleDetails = new ArrayList<HashMap<String, String>>();
@@ -381,23 +448,27 @@ public ModelAndView handleLogin(
     @RequestParam("userID") String userID,
     @RequestParam("userName") String userName, HttpSession session
     ) {
-        session.setAttribute("userID", userID);
+		session.setAttribute("userID", userID);
+		session.setAttribute("userName", userName);
         Login user = new Login();
         user.setFbid(userID);
 		user.setName(userName);
-		// int count = loginRepositoryy.findCount(userID);
-        // if(count==0){
-		// 	loginRepositoryy.save(user);
-		// 	System.out.println(1);
-		// }
 		
-		if (userID.equals("1762276433882018f"))	{
+		 long count = loginRepositoryy.countByfbid(userID);
+         if(count==0){
+			loginRepositoryy.save(user);
+		 }
+
+		if (userID.equals("105857927119951"))	{
 			return new ModelAndView("redirect:/admin");
 
 		}	else{
 		return new ModelAndView("redirect:/index2");
 		}
 	}
+
+	
+    
 	
 	@GetMapping("/deleteuser")
 	public ModelAndView deleteUser(
@@ -415,18 +486,38 @@ public ModelAndView handleLogin(
 
 			}
 
+			@GetMapping("/removeteam")
+	public ModelAndView removeTeam(HttpSession session,
+			@RequestParam("id") Integer id 
+			) {
+				String userID= session.getAttribute("userID").toString();
+				ModelAndView index = new ModelAndView("index2");
+				userRepository.deleteById(id);
+				List<User> users = new ArrayList<User>();
+				for(User user : userRepository.findByfbid(userID)){
+					users.add(user);
+				}
+			index.addObject("users",users);
+			return index;			
+
+			}
+
 			@GetMapping("/index2")
 			public ModelAndView getFav(HttpSession session)
 			 {
-				 String userID= session.getAttribute("userID").toString();
-				System.out.println(userID);
+				String userID;
+				try{
+				  userID= session.getAttribute("userID").toString();
+				}catch(Exception e){
+					return new ModelAndView("redirect:/login");
+
+				}
 				ModelAndView index = new ModelAndView("index2");
 				 List<User> users = new ArrayList<User>();
 				 for(User user : userRepository.findByfbid(userID)){
 					 users.add(user);
 				 }
 				 index.addObject("users",users);
-				 System.out.println(users);
 			return index;			
 
 			}

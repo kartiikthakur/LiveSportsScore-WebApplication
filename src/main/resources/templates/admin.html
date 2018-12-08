@@ -10,17 +10,19 @@
 <body>
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
-                <a class="navbar-brand" href="/index">
+                <a class="navbar-brand" href="/admin">
                     <img src="Images/logo.png" width="30" height="30" alt="">
                   </a>
-                  <a class="navbar-brand" href="#">Basketbuzz</a>                   
+                  <a class="navbar-brand" href="/admin">Basketbuzz</a>   
+                               
                     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                       <div class="navbar-nav">
+                          <a class="nav-item nav-link" id="link_login" href="/logout"> Logout</a>   
                         </div>
                     </div>                                              
                   </nav>
 
-                  <p th:text="'Hello, ' + ${name} + '!'" />
+                  <p th:text="'Hello Admin, ' + ${name} + '!'" />
                   <table class="table">
                         <thead>
                         <tr>
@@ -35,7 +37,7 @@
                             <td th:text="${user.id}">
                              <td th:text="${user.fbid}">
                              <td th:text="${user.name}"></td>
-                             <td > <a th:href="@{~/deleteuser?id=} + ${user.id}" th:text="${'Block User'}"> </a> </td>
+                             <td> <a th:href="@{~/deleteuser?id=} + ${user.id}" th:text="${'Block User'}"> </a> </td>
                             
                           </tr>
                           </tr>

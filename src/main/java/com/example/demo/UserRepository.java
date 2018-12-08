@@ -19,5 +19,11 @@ public interface UserRepository extends CrudRepository<User, Integer> {
 @Query("from User u where  u.fbid=:fbid")
 public List<User> findByfbid(String fbid);
 
+long countByabr(String abr);
+
+@Query("select count(u) from User u where u.fbid = :fbid and u.abr = :abr")
+public long findTeamCount(@Param("fbid") String fbid,
+                                 @Param("abr") String abr);
+
 
 }
