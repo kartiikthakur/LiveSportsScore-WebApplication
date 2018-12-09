@@ -73,21 +73,11 @@ class genericCtrl{
 
 
 
-	@GetMapping("/logout")
-	public ModelAndView renderLogout(HttpSession session)
-	{
-		ModelAndView logout = new ModelAndView("logoutindex");
-		return logout;
-	}
-
-
-
 	@GetMapping("/select")
 	 	public ModelAndView renderSelect(HttpSession session) {
 			String userID;
 			try{
-				userID= session.getAttribute("userID").toString();
-				System.out.println(userID);
+				userID= session.getAttribute("userID").toString();				
 			} catch(Exception e){
 				return new ModelAndView("redirect:/login");			
 			}
@@ -100,9 +90,7 @@ class genericCtrl{
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Basic "+encoding);
 		HttpEntity<String> request = new HttpEntity<String>(headers);
-
-		
-		
+			
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
 		String str = response.getBody(); 
@@ -198,7 +186,6 @@ class genericCtrl{
 			String userID;
 			try{
 				userID= session.getAttribute("userID").toString();
-				System.out.println(userID);
 			} catch(Exception e){
 				return new ModelAndView("redirect:/login");			
 			}
@@ -223,7 +210,6 @@ class genericCtrl{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<NBATeamStanding> response = restTemplate.exchange(url, HttpMethod.GET, request, NBATeamStanding.class);
 		NBATeamStanding ts = response.getBody();
-		System.out.println(ts.toString());
 		//Send the object to view
 		showTeams.addObject("teamStandingEntries", ts.getOverallteamstandings().getTeamstandingsentries());
 
@@ -297,7 +283,6 @@ class genericCtrl{
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode root = mapper.readTree(str);
-			System.out.println(str);
 	        JsonNode gameScore = root.get("scoreboard").get("gameScore");
 	        
 	        if(gameScore.isArray()) {
@@ -349,9 +334,6 @@ class genericCtrl{
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode root = mapper.readTree(str);
-			System.out.println(str);
-	        System.out.println(root.get("teamgamelogs").get("lastUpdatedOn").asText());
-	        System.out.println(root.get("teamgamelogs").get("gamelogs").getNodeType());
 	        JsonNode gamelogs = root.get("teamgamelogs").get("gamelogs");
 	        
 	        if(gamelogs.isArray()) {
@@ -414,8 +396,6 @@ class genericCtrl{
 		ObjectMapper mapper = new ObjectMapper();
 		try {
 			JsonNode root = mapper.readTree(str);
-			System.out.println(str);
-			//JsonNode jsonNode1 = actualObj.get("lastUpdatedOn");
 	        JsonNode gameentry = root.get("dailygameschedule").get("gameentry");
 	        
 	        if(gameentry.isArray()) {
@@ -436,35 +416,8 @@ class genericCtrl{
 			e.printStackTrace();
 		}
 	 
-		schedule.addObject("scheduleDetails", scheduleDetails);
-		
-        
+		schedule.addObject("scheduleDetails", scheduleDetails);       
 		return schedule;
-	}
-
-	
-@PostMapping("/fblogin")
-public ModelAndView handleLogin(
-    @RequestParam("userID") String userID,
-    @RequestParam("userName") String userName, HttpSession session
-    ) {
-		session.setAttribute("userID", userID);
-		session.setAttribute("userName", userName);
-        Login user = new Login();
-        user.setFbid(userID);
-		user.setName(userName);
-		
-		 long count = loginRepositoryy.countByfbid(userID);
-         if(count==0){
-			loginRepositoryy.save(user);
-		 }
-
-		if (userID.equals("105857927119951"))	{
-			return new ModelAndView("redirect:/admin");
-
-		}	else{
-		return new ModelAndView("redirect:/index2");
-		}
 	}
 
 	
