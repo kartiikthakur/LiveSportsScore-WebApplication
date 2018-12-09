@@ -38,6 +38,7 @@
 <table class="table">
     <thead>
     <tr>
+        <th scope="col">Home team</th>
       <th scope="col">Away team</th>
       <th scope="col">Date</th>
       <th scope="col">Time</th>
@@ -50,6 +51,7 @@
     </tr>
   </thead>
     	<tr th:each="gameDetail,iterStat : ${gameDetails}" >
+         <td th:text="${gameDetail.get('homeTeam')}" >  </td>
         <td th:text="${gameDetail.get('awayTeam')}" >  </td>
      		<td th:text="${gameDetail.get('date')}">  </td>
             <td th:text="${gameDetail.get('time')}">  </td>

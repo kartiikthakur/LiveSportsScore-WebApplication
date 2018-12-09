@@ -319,23 +319,20 @@ class genericCtrl{
 		ModelAndView teamInfo = new ModelAndView("teamInfo");
 		ArrayList<HashMap<String, String>> gameDetails = new ArrayList<HashMap<String, String>>();
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/team_gamelogs.json?team=" + teamID;
-		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
-        
+		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());       
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Basic "+encoding);
-		HttpEntity<String> request = new HttpEntity<String>(headers);
-
-		
-		
+		HttpEntity<String> request = new HttpEntity<String>(headers);	
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
 		String str = response.getBody(); 
 		ObjectMapper mapper = new ObjectMapper();
+
+
 		try {
 			JsonNode root = mapper.readTree(str);
-	        JsonNode gamelogs = root.get("teamgamelogs").get("gamelogs");
-	        
+	        JsonNode gamelogs = root.get("teamgamelogs").get("gamelogs");	        
 	        if(gamelogs.isArray()) {
 	        	
 	        	gamelogs.forEach(gamelog -> {
@@ -347,19 +344,18 @@ class genericCtrl{
 					gameDetail.put("time", game.get("time").asText());
 					gameDetail.put("location", game.get("location").asText());
 					gameDetail.put("awayTeam", game.get("awayTeam").get("Abbreviation").asText());
+					gameDetail.put("homeTeam", game.get("homeTeam").get("Abbreviation").asText());
 					gameDetail.put("wins", stats.get("Wins").get("#text").asText());
 					gameDetail.put("losses", stats.get("Losses").get("#text").asText());
-					gameDetail.put("winpct", stats.get("WinPct").get("#text").asText());
-
-
-					
-	        		gameDetails.add(gameDetail);
-	        		
+					gameDetail.put("winpct", stats.get("WinPct").get("#text").asText());				
+	        		gameDetails.add(gameDetail);	        		
 	        	});
 	        }
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+
+		
 	 
 		teamInfo.addObject("gameDetails", gameDetails);
 		
