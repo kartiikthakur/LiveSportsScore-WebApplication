@@ -76,8 +76,8 @@ public ModelAndView handleLogin(
 				} catch(Exception e){
 					System.out.println("UserID gone");
 				}
-				System.out.println(1);
 				return logout;	
+				//return new ModelAndView("redirect:/admin");
 	}
 
 

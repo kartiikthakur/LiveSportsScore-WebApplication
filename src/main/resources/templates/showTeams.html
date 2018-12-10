@@ -42,15 +42,18 @@
       <th scope="col">Name</th>
       <th scope="col">City</th>
       <th scope="col">Full Schedule</th>
+      <th scope="col">Add to Favourite</th>
+
     </tr>
   </thead>
   
     	<tr th:each="teamStandingEntry : ${teamStandingEntries}" >
      		<td style="font-weight:bold" font-colour="#fff" th:text="${teamStandingEntry.team.Abbreviation}" th:id="${teamStandingEntry.team.ID}">
      		<td style="font-weight:bold">  <a th:href="@{~/team?id=} + ${teamStandingEntry.team.ID}" th:text="${teamStandingEntry.team.Name}"> </a> </td>
-        <td style="font-weight:bold"th:text="${teamStandingEntry.team.City}">
+        <td style="font-weight:bold" th:text="${teamStandingEntry.team.City}">
         <td style="font-weight:bold">  <a th:href="@{~/schedules?id=} + ${teamStandingEntry.team.ID}" th:text="${'Full Schedule'}"> </a> </td>
-  		</tr>
+        <td style="font-weight:bold">  <a th:href="'/add?name=' + ${teamStandingEntry.team.City} +' '+ ${teamStandingEntry.team.Name} + '&abr=' + ${teamStandingEntry.team.Abbreviation}" th:text="${'Add to Favourite'}"> </a> </td>
+  		</tr> 
     </table>
     
     
