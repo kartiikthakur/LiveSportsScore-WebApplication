@@ -6,12 +6,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <div class="musica-cta-area section-padding-100 mt-100 bg-img bg-overlay2" th:style="'background-image: url(img/core-img/teams11.jpg);'">
     
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
                 <a class="navbar-brand" href="/index2">
-                    <img src="Images/logo.png" width="30" height="30" alt="">
+                    <img src="img/core-img/logo.jpg" width="30" height="30" alt="">
                   </a>
                   <a class="navbar-brand" href="/index2">Basketbuzz</a>
                   
@@ -50,7 +49,7 @@
      		<td style="font-weight:bold" font-colour="#fff" th:text="${teamStandingEntry.team.Abbreviation}" th:id="${teamStandingEntry.team.ID}">
      		<td style="font-weight:bold">  <a th:href="@{~/team?id=} + ${teamStandingEntry.team.ID}" th:text="${teamStandingEntry.team.Name}"> </a> </td>
         <td style="font-weight:bold"th:text="${teamStandingEntry.team.City}">
-          <td style="font-weight:bold">  <a th:href="@{~/schedules?id=} + ${teamStandingEntry.team.ID}" th:text="${'Full Schedule'}"> </a> </td>
+        <td style="font-weight:bold">  <a th:href="@{~/schedules?id=} + ${teamStandingEntry.team.ID}" th:text="${'Full Schedule'}"> </a> </td>
   		</tr>
     </table>
     

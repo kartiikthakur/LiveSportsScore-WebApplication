@@ -6,11 +6,12 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+    <div class="musica-cta-area section-padding-100 mt-100 bg-img bg-overlay2" th:style="'background-image: url(img/core-img/rank.jpg);'">
     
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
                 <a class="navbar-brand" href="/index2">
-                    <img src="Images/logo.png" width="30" height="30" alt="">
+                    <img src="img/core-img/logo.jpg" width="30" height="30" alt="">
                   </a>
                   <a class="navbar-brand" href="/index2">Basketbuzz</a>
                   
@@ -47,10 +48,10 @@
   </thead>
   
     	<tr th:each="teamStandingEntry : ${teamStandingEntries}" >
-            <td th:text="${teamStandingEntry.rank}">
-     		<td th:text="${teamStandingEntry.team.Abbreviation}" th:id="${teamStandingEntry.team.ID}">
-     		<td th:text="${teamStandingEntry.team.Name}">  </td>
-  			<td th:text="${teamStandingEntry.team.City}">
+            <td style="font-weight:bold" th:text="${teamStandingEntry.rank}">
+     		<td style="font-weight:bold" th:text="${teamStandingEntry.team.Abbreviation}" th:id="${teamStandingEntry.team.ID}">
+     		<td style="font-weight:bold" th:text="${teamStandingEntry.team.Name}">  </td>
+  			<td style="font-weight:bold" th:text="${teamStandingEntry.team.City}">
             
   		</tr>
   		</tr>

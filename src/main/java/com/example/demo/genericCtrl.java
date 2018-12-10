@@ -58,8 +58,14 @@ class genericCtrl{
 
 
 	@GetMapping("/index")
-	public ModelAndView renderIndex()
+	public ModelAndView renderIndex(HttpSession session)
 	{
+		String userID;
+			try{
+				userID= session.getAttribute("userID").toString();				
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
 		ModelAndView m = new ModelAndView();
 		m.setViewName("index");
 		m.addObject("name");
@@ -75,7 +81,6 @@ class genericCtrl{
 				return new ModelAndView("redirect:/login");			
 			}
 		ModelAndView select = new ModelAndView("select");
-		ModelAndView teamInfo = new ModelAndView("teamInfo");
 		ArrayList<HashMap<String, String>> gameDetails = new ArrayList<HashMap<String, String>>();
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/overall_team_standings.json";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());        

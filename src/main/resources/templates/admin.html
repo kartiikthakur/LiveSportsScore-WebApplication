@@ -8,10 +8,11 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
+    <div class="musica-cta-area section-padding-100 mt-100 bg-img bg-overlay2" th:style="'background-image: url(img/core-img/admin.jpg);'">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
                 <a class="navbar-brand" href="/admin">
-                    <img src="Images/logo.png" width="30" height="30" alt="">
+                    <img src="img/core-img/logo.jpg" width="30" height="30" alt="">
                   </a>
                   <a class="navbar-brand" href="/admin">Basketbuzz</a>   
                                
@@ -34,10 +35,10 @@
                         </tr>
                       </thead>
                       <tr th:each="user : ${users}" >
-                            <td th:text="${user.id}">
-                             <td th:text="${user.fbid}">
-                             <td th:text="${user.name}"></td>
-                             <td> <a th:href="@{~/deleteuser?id=} + ${user.id}" th:text="${'Block User'}"> </a> </td>
+                              <td style="font-weight:bold" th:text="${user.id}">
+                             <td style="font-weight:bold" th:text="${user.fbid}">
+                             <td style="font-weight:bold" th:text="${user.name}"></td>
+                             <td style="font-weight:bold"> <a th:href="@{~/deleteuser?id=} + ${user.id}" th:text="${'Block User'}"> </a> </td>
                             
                           </tr>
                           </tr>

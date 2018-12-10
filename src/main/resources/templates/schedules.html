@@ -10,7 +10,7 @@
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
                 <a class="navbar-brand" href="/index2">
-                    <img src="Images/logo.png" width="30" height="30" alt="">
+                    <img src="img/core-img/logo.jpg" width="30" height="30" alt="">
                   </a>
                   <a class="navbar-brand" href="/index2">Basketbuzz</a>
                   
@@ -48,11 +48,11 @@
   </thead>
   
     	<tr th:each="scheduleDetail,iterStat : ${scheduleDetails}" >
-        <td th:text="${scheduleDetail.get('homeTeam')}">
-        <td th:text="${scheduleDetail.get('awayTeam')}">
-     		<td th:text="${scheduleDetail.get('date')}">
-     		<td th:text="${scheduleDetail.get('time')}">
-  			<td th:text="${scheduleDetail.get('location')}">
+        <td style="font-weight:bold" th:text="${scheduleDetail.get('homeTeam')}">
+        <td style="font-weight:bold" th:text="${scheduleDetail.get('awayTeam')}">
+     		<td style="font-weight:bold" th:text="${scheduleDetail.get('date')}">
+     		<td style="font-weight:bold" th:text="${scheduleDetail.get('time')}">
+  			<td style="font-weight:bold" th:text="${scheduleDetail.get('location')}">
             
   		</tr>
   		</tr>
