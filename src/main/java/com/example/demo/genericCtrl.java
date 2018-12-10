@@ -66,13 +66,6 @@ class genericCtrl{
 		return m;
 	}
 
-	// 	@GetMapping("/select")
-	// 	public String renderSelect() {
-	// 		return "select";		
-	// }
-
-
-
 	@GetMapping("/select")
 	 	public ModelAndView renderSelect(HttpSession session) {
 			String userID;
@@ -99,16 +92,14 @@ class genericCtrl{
 			JsonNode root = mapper.readTree(str);
 	        JsonNode gamelogs = root.get("overallteamstandings").get("teamstandingsentry");
 	        
-	        if(gamelogs.isArray()) {
-	        	
+	        if(gamelogs.isArray()) {	        	
 	        	gamelogs.forEach(gamelog -> {
 	        		JsonNode game = gamelog.get("team");
 	        		HashMap<String,String> gameDetail = new HashMap<String, String>();
 	        		gameDetail.put("City", game.get("City").asText());
 					gameDetail.put("Name", game.get("Name").asText());					
 					gameDetail.put("Abbreviation", game.get("Abbreviation").asText());
-	        		gameDetails.add(gameDetail);
-	        		
+	        		gameDetails.add(gameDetail);	        		
 	        	});
 	        }
 		} catch (IOException e) {
@@ -116,8 +107,7 @@ class genericCtrl{
 		}
 	 
 		select.addObject("gameDetails", gameDetails);       
-		return select;
-		
+		return select;		
 	 }
 
 	@GetMapping("/admin")
@@ -145,8 +135,10 @@ class genericCtrl{
 	public ModelAndView saveStuff (@RequestParam String name, HttpSession session)
 	{
 		String userID;
+		String userName;
 		try{
 			userID= session.getAttribute("userID").toString();
+			userName= session.getAttribute("userName").toString();
 		} catch(Exception e){
 			ModelAndView login = new ModelAndView("redirect:/login");
 			return login;
@@ -154,7 +146,6 @@ class genericCtrl{
 		ModelAndView index = new ModelAndView("index");	
 		Map<String,String> TeamMap ;
 		List<Map<String,String>> All = new ArrayList<>();
-        session.setAttribute("userID", userID);
 		String team[] = name.split(",");
 		for(String string: team){
 		String split[] = string.split("-");
@@ -172,7 +163,7 @@ class genericCtrl{
 		All.add(TeamMap);
 		userRepository.save(teams);
 		}
-		}		
+		}			
 		index.addObject("AllSelections", All);
 		return new ModelAndView("redirect:/index2");	
 	}
@@ -184,16 +175,15 @@ class genericCtrl{
 	//public ModelAndView getTeams() {
 		public ModelAndView getTeams(HttpSession session) {
 			String userID;
+			String userName;
 			try{
 				userID= session.getAttribute("userID").toString();
+				userName= session.getAttribute("userName").toString();
 			} catch(Exception e){
 				return new ModelAndView("redirect:/login");			
-			}
-
-	
+			}	
 		ModelAndView showTeams = new ModelAndView("showTeams");
-		showTeams.addObject("name", "Kartik");
-
+		showTeams.addObject("name", userName);
 
 		//Endpoint to call
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/overall_team_standings.json";
@@ -212,7 +202,6 @@ class genericCtrl{
 		NBATeamStanding ts = response.getBody();
 		//Send the object to view
 		showTeams.addObject("teamStandingEntries", ts.getOverallteamstandings().getTeamstandingsentries());
-
 		return showTeams;
 	}
 
@@ -222,15 +211,16 @@ class genericCtrl{
 	@GetMapping("/ranking")
 	public ModelAndView getRanks(HttpSession session) {
 		String userID;
+		String userName;
 			try{
 				userID= session.getAttribute("userID").toString();
+				userName= session.getAttribute("userName").toString();
 				System.out.println(userID);
 			} catch(Exception e){
 				return new ModelAndView("redirect:/login");			
 			}
 		ModelAndView ranks = new ModelAndView("ranking");
-		ranks.addObject("name", "Kartik");
-
+		ranks.addObject("name", userName);
 
 		//Endpoint to call
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/overall_team_standings.json";
@@ -247,10 +237,8 @@ class genericCtrl{
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<NBATeamStanding> response = restTemplate.exchange(url, HttpMethod.GET, request, NBATeamStanding.class);
 		NBATeamStanding ts = response.getBody();
-		System.out.println(ts.toString());
 		//Send the object to view
 		ranks.addObject("teamStandingEntries", ts.getOverallteamstandings().getTeamstandingsentries());
-
 		return ranks;
 	}
 
@@ -258,24 +246,24 @@ class genericCtrl{
 	@GetMapping("/scoreboard")
 	public ModelAndView getScoreInfo(HttpSession session){
 		String userID;
+		String userName;
 			try{
 				userID= session.getAttribute("userID").toString();
+				userName= session.getAttribute("userName").toString();
 			} catch(Exception e){
 				return new ModelAndView("redirect:/login");			
 			}
 			
 		ModelAndView scoreboard = new ModelAndView("scoreboard");
-		scoreboard.addObject("name", "Kartik");
+		scoreboard.addObject("name", userName);
 		ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181025";
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181101";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
 		headers.setContentType(MediaType.APPLICATION_JSON);
 		headers.set("Authorization", "Basic "+encoding);
 		HttpEntity<String> request = new HttpEntity<String>(headers);
-
-		
 		
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
@@ -285,8 +273,7 @@ class genericCtrl{
 			JsonNode root = mapper.readTree(str);
 	        JsonNode gameScore = root.get("scoreboard").get("gameScore");
 	        
-	        if(gameScore.isArray()) {
-	        	
+	        if(gameScore.isArray()) {	        	
 	        	gameScore.forEach(gamescores -> {
 	        		//JsonNode game = gamescores.get("game");
 					HashMap<String,String> scoreDetail = new HashMap<String, String>();
@@ -295,28 +282,33 @@ class genericCtrl{
 	        		scoreDetail.put("homeScore", gamescores.get("homeScore").asText());
 	        		scoreDetail.put("awayTeam", gamescores.get("game").get("awayTeam").get("City").asText());
 	        		scoreDetail.put("homeTeam", gamescores.get("game").get("homeTeam").get("City").asText());
-	        		scoreDetails.add(scoreDetail);
-	        		
+	        		scoreDetails.add(scoreDetail);	        		
 	        	});
 	        }
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
-	 
-		scoreboard.addObject("scoreDetails", scoreDetails);
-		
-        
+		}	 
+		scoreboard.addObject("scoreDetails", scoreDetails);       
 		return scoreboard;
 	}
 
 	
-	//Using objectMapper
+
 	@GetMapping("/team")
-	public ModelAndView getTeamInfo(
-			@RequestParam("id") String teamID 
+	public ModelAndView getTeamInfo(HttpSession session,
+			@RequestParam("id") String teamID
 			) {
+				String userID;
+		String userName;
+			try{
+				userID= session.getAttribute("userID").toString();
+				userName= session.getAttribute("userName").toString();
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
 		ModelAndView teamInfo = new ModelAndView("teamInfo");
+		teamInfo.addObject("name", userName);
 		ArrayList<HashMap<String, String>> gameDetails = new ArrayList<HashMap<String, String>>();
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/team_gamelogs.json?team=" + teamID;
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());       
@@ -343,6 +335,8 @@ class genericCtrl{
 	        		gameDetail.put("date", game.get("date").asText());
 					gameDetail.put("time", game.get("time").asText());
 					gameDetail.put("location", game.get("location").asText());
+					gameDetail.put("awayID", game.get("awayTeam").get("ID").asText());
+					gameDetail.put("homeID", game.get("homeTeam").get("ID").asText());
 					gameDetail.put("awayTeam", game.get("awayTeam").get("Abbreviation").asText());
 					gameDetail.put("homeTeam", game.get("homeTeam").get("Abbreviation").asText());
 					gameDetail.put("wins", stats.get("Wins").get("#text").asText());
@@ -354,27 +348,25 @@ class genericCtrl{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-
-		
-	 
-		teamInfo.addObject("gameDetails", gameDetails);
-		
-        
+		teamInfo.addObject("gameDetails", gameDetails);       
 		return teamInfo;
 	}
 
-	//Using objectMapper
+
+
 	@GetMapping("/schedule")
 	public ModelAndView getSchedule(HttpSession session) { 
 		String userID;
+		String userName;
 			try{
 				userID= session.getAttribute("userID").toString();
+				userName= session.getAttribute("userName").toString();
 				System.out.println(userID);
 			} catch(Exception e){
 				return new ModelAndView("redirect:/login");			
 			}
 		ModelAndView schedule = new ModelAndView("schedule");
-		schedule.addObject("name", "Kartik");
+		schedule.addObject("name", userName);
 		ArrayList<HashMap<String, String>> scheduleDetails = new ArrayList<HashMap<String, String>>();
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/daily_game_schedule.json?fordate=20181114";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
@@ -385,7 +377,6 @@ class genericCtrl{
 		HttpEntity<String> request = new HttpEntity<String>(headers);
 
 		
-		
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
 		String str = response.getBody(); 
@@ -394,8 +385,7 @@ class genericCtrl{
 			JsonNode root = mapper.readTree(str);
 	        JsonNode gameentry = root.get("dailygameschedule").get("gameentry");
 	        
-	        if(gameentry.isArray()) {
-	        	
+	        if(gameentry.isArray()) {	        	
 	        	gameentry.forEach(gameentryy -> {
 	        		HashMap<String,String> gameDetail = new HashMap<String, String>();
 	        		gameDetail.put("id", gameentryy.get("id").asText());
@@ -410,11 +400,11 @@ class genericCtrl{
 	        }
 		} catch (IOException e) {
 			e.printStackTrace();
-		}
-	 
+		}	 
 		schedule.addObject("scheduleDetails", scheduleDetails);       
 		return schedule;
 	}
+
 
 	
     
@@ -432,7 +422,6 @@ class genericCtrl{
 				}
 			admin.addObject("users",users);
 			return admin;			
-
 			}
 
 			@GetMapping("/removeteam")
@@ -448,8 +437,8 @@ class genericCtrl{
 				}
 			index.addObject("users",users);
 			return index;			
-
 			}
+
 
 			@GetMapping("/index2")
 			public ModelAndView getFav(HttpSession session)
@@ -466,10 +455,99 @@ class genericCtrl{
 				 for(User user : userRepository.findByfbid(userID)){
 					 users.add(user);
 				 }
-				 index.addObject("users",users);
+					 
+		ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181101";
+		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
+        
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", "Basic "+encoding);
+		HttpEntity<String> request = new HttpEntity<String>(headers);
+		
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+		String str = response.getBody(); 
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode root = mapper.readTree(str);
+	        JsonNode gameScore = root.get("scoreboard").get("gameScore");
+	        
+	        if(gameScore.isArray()) {	        	
+	        	gameScore.forEach(gamescores -> {
+	        		//JsonNode game = gamescores.get("game");
+					HashMap<String,String> scoreDetail = new HashMap<String, String>();
+					scoreDetail.put("ID", gamescores.get("game").get("ID").asText());
+	        		scoreDetail.put("awayScore", gamescores.get("awayScore").asText());
+	        		scoreDetail.put("homeScore", gamescores.get("homeScore").asText());
+	        		scoreDetail.put("awayTeam", gamescores.get("game").get("awayTeam").get("City").asText());
+	        		scoreDetail.put("homeTeam", gamescores.get("game").get("homeTeam").get("City").asText());
+	        		scoreDetails.add(scoreDetail);	        		
+	        	});
+	        }
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}	 
+			index.addObject("scoreDetails", scoreDetails); 				 
+			index.addObject("users",users);
 			return index;			
 
 			}
+
+			@GetMapping("/schedules")
+	public ModelAndView getSchedules(HttpSession session, @RequestParam("id") String teamID ) { 
+		String userID;
+		String userName;
+			try{
+				userID= session.getAttribute("userID").toString();
+				userName= session.getAttribute("userName").toString();
+			} catch(Exception e){
+				return new ModelAndView("redirect:/login");			
+			}
+		ModelAndView schedule = new ModelAndView("schedules");
+		schedule.addObject("name", userName);
+		ArrayList<HashMap<String, String>> scheduleDetails = new ArrayList<HashMap<String, String>>();
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/full_game_schedule.json";
+		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
+        
+		HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.APPLICATION_JSON);
+		headers.set("Authorization", "Basic "+encoding);
+		HttpEntity<String> request = new HttpEntity<String>(headers);
+
+		
+		RestTemplate restTemplate = new RestTemplate();
+		ResponseEntity<String> response = restTemplate.exchange(url, HttpMethod.GET, request, String.class);
+		String str = response.getBody(); 
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			JsonNode root = mapper.readTree(str);
+	        JsonNode gameentry = root.get("fullgameschedule").get("gameentry");
+	        
+	        if(gameentry.isArray()) {	        	
+	        	gameentry.forEach(gameentryy -> {
+					String id1 = gameentryy.get("awayTeam").get("ID").asText();
+					String id2 = gameentryy.get("homeTeam").get("ID").asText();
+					if (teamID.equals(id1) || teamID.equals(id2) ){
+	        		HashMap<String,String> gameDetail = new HashMap<String, String>();
+	        		gameDetail.put("id", gameentryy.get("id").asText());
+	        		gameDetail.put("date", gameentryy.get("date").asText());
+					gameDetail.put("time", gameentryy.get("time").asText());
+					gameDetail.put("location", gameentryy.get("location").asText());
+					gameDetail.put("awayTeam", gameentryy.get("awayTeam").get("Abbreviation").asText());
+					gameDetail.put("homeTeam", gameentryy.get("homeTeam").get("Abbreviation").asText());
+					scheduleDetails.add(gameDetail);
+					}
+	        		
+	        	});
+	        }
+		} catch (IOException e) {
+			e.printStackTrace();
+		}	 
+		schedule.addObject("scheduleDetails", scheduleDetails);       
+		return schedule;
+	}
 
 			
 

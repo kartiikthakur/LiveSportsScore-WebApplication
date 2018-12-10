@@ -24,7 +24,7 @@
                         <a class="nav-item nav-link" id="link_team" href="/teams"> Teams Information</a> 
                         <a class="nav-item nav-link" id="link_select" href="/select"> Select Favourite Teams</a> 
                         <a class="nav-item nav-link" id="link_ranking" href="/ranking"> Team Rankings</a> 
-                        <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Scoreboard</a> 
+                        <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Daily Scoreboard</a> 
                         <a class="nav-item nav-link" id="link_schedule" href="/schedule"> Daily Schedule</a> 
                         <a class="nav-item nav-link" id="link_login" href="/logout"> Logout</a> 
                         <!-- <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>   -->
@@ -34,21 +34,23 @@
                       </div>
                                                  
                     </nav>
-    <p th:text="'Hello, ' + ${name} + '. Please Click on the Name link to see the schedule of the team!'" />
+    <p th:text="'Hello, ' + ${name} + '. Please Click on the links to view the Upcoming Schedule,Previous Wins and Losses and Full Schedule of the Particular Team!'" />
     
-    <table class="table">
+    <table class="table table-striped">
     <thead>
     <tr>
       <th scope="col">Abbreviation</th>
       <th scope="col">Name</th>
       <th scope="col">City</th>
+      <th scope="col">Full Schedule</th>
     </tr>
   </thead>
   
     	<tr th:each="teamStandingEntry : ${teamStandingEntries}" >
      		<td style="font-weight:bold" font-colour="#fff" th:text="${teamStandingEntry.team.Abbreviation}" th:id="${teamStandingEntry.team.ID}">
      		<td style="font-weight:bold">  <a th:href="@{~/team?id=} + ${teamStandingEntry.team.ID}" th:text="${teamStandingEntry.team.Name}"> </a> </td>
-  			<td style="font-weight:bold"th:text="${teamStandingEntry.team.City}">
+        <td style="font-weight:bold"th:text="${teamStandingEntry.team.City}">
+          <td style="font-weight:bold">  <a th:href="@{~/schedules?id=} + ${teamStandingEntry.team.ID}" th:text="${'Full Schedule'}"> </a> </td>
   		</tr>
     </table>
     

@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Rankings</title>
+    <title>Schedule</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
@@ -20,10 +20,10 @@
                          
                         <a
                          class="nav-item nav-link active" id="link_index" href="/index2">Home <span class="sr-only">(current)</span></a>
-                         <a class="nav-item nav-link" id="link_team" href="/teams"> Teams Information</a> 
-                        <a class="nav-item nav-link" id="link_select" href="/select"> Select Favourite Teams</a> 
+                        <a class="nav-item nav-link" id="link_team" href="/teams"> Teams Information</a> 
+                        <a class="nav-item nav-link" id="link_select" href="/select"> Select Favourite Team</a> 
                         <a class="nav-item nav-link" id="link_ranking" href="/ranking"> Team Rankings</a> 
-                        <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Daily Scoreboard</a> 
+                        <a class="nav-item nav-link" id="link_scores" href="/scoreboard">Daily Scoreboard</a> 
                         <a class="nav-item nav-link" id="link_schedule" href="/schedule"> Daily Schedule</a> 
                         <a class="nav-item nav-link" id="link_login" href="/logout"> Logout</a> 
                         <!-- <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>   -->
@@ -33,24 +33,26 @@
                       </div>
                                                  
                     </nav>
-    <p th:text="'Hello, ' + ${name} + '.This is the list of ranked team standings for all teams for current season!'" />
+    <p th:text="'Hello, ' + ${name} + 'Please Click on the Select favourite Teams tab in the Navigation bar and select this team from the drop down to add it in your favourite list!'" />
     
     <table class="table table-striped">
     <thead>
     <tr>
-        <th scope="col">Rank</th>
-      <th scope="col">Abb</th>
-      <th scope="col">Name</th>
-      <th scope="col">City</th>
+    <th scope="col">Home Team</th>
+      <th scope="col">Away Team</th>
+      <th scope="col">Date</th>
+      <th scope="col">Time</th>
+      <th scope="col">Location</th>
       
     </tr>
   </thead>
   
-    	<tr th:each="teamStandingEntry : ${teamStandingEntries}" >
-            <td th:text="${teamStandingEntry.rank}">
-     		<td th:text="${teamStandingEntry.team.Abbreviation}" th:id="${teamStandingEntry.team.ID}">
-     		<td th:text="${teamStandingEntry.team.Name}">  </td>
-  			<td th:text="${teamStandingEntry.team.City}">
+    	<tr th:each="scheduleDetail,iterStat : ${scheduleDetails}" >
+        <td th:text="${scheduleDetail.get('homeTeam')}">
+        <td th:text="${scheduleDetail.get('awayTeam')}">
+     		<td th:text="${scheduleDetail.get('date')}">
+     		<td th:text="${scheduleDetail.get('time')}">
+  			<td th:text="${scheduleDetail.get('location')}">
             
   		</tr>
   		</tr>

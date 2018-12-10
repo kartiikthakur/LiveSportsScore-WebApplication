@@ -6,7 +6,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    </div>
+        <div class="musica-cta-area section-padding-100 mt-100 bg-img bg-overlay2" th:style="'background-image: url(img/core-img/team1.jpg);'">
     
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
@@ -24,7 +24,7 @@
                          <a class="nav-item nav-link" id="link_team" href="/teams"> Teams Information</a> 
                         <a class="nav-item nav-link" id="link_select" href="/select"> Select Favourite Teams</a> 
                         <a class="nav-item nav-link" id="link_ranking" href="/ranking"> Team Rankings</a> 
-                        <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Scoreboard</a> 
+                        <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Daily Scoreboard</a> 
                         <a class="nav-item nav-link" id="link_schedule" href="/schedule"> Daily Schedule</a>
                         <a class="nav-item nav-link" id="link_login" href="/logout"> Logout</a>  
                         <!-- <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>   -->
@@ -34,18 +34,19 @@
                       </div>
                                                  
                     </nav>
-<div class="container">
-<table class="table">
-    <thead>
-    <tr>
-        <th scope="col">Home team</th>
-      <th scope="col">Away team</th>
-      <th scope="col">Date</th>
-      <th scope="col">Time</th>
-      <th scope="col">Location</th>
-      <th scope="col">Previous Wins</th>
-      <th scope="col">Previous Losses</th>
-      <th scope="col">Win %</th>
+                    <p th:text="'Hello, ' + ${name} + 'Please Click on the Select favourite Teams tab in the Navigation bar and select this team from the drop down to add it in your favourite list!'" />
+                    <div class="container">
+                    <table class="table table-striped">
+                <thead>
+                <tr>
+                    <th scope="col">Home team</th>
+                <th scope="col">Away team</th>
+                <th scope="col">Date</th>
+                <th scope="col">Time</th>
+                <th scope="col">Location</th>
+                <th scope="col">Previous Wins</th>
+                <th scope="col">Previous Losses</th>
+                <th scope="col">Win %</th>
 
       
     </tr>
@@ -53,6 +54,8 @@
     	<tr th:each="gameDetail,iterStat : ${gameDetails}" >
          <td th:text="${gameDetail.get('homeTeam')}" >  </td>
         <td th:text="${gameDetail.get('awayTeam')}" >  </td>
+        <!-- <td> <a th:href="@{~/schedules?id=} + ${gameDetail.get('homeID')}" th:text="${gameDetail.get('homeTeam')}"></a> </td>
+        <td> <a th:href="@{~/schedules?id=} + ${gameDetail.get('awayID')}" th:text="${gameDetail.get('awayTeam')}"></a> </td> -->
      		<td th:text="${gameDetail.get('date')}">  </td>
             <td th:text="${gameDetail.get('time')}">  </td>
             <td th:text="${gameDetail.get('location')}">  </td>
@@ -68,6 +71,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</div>
 
 </body>
 </html>

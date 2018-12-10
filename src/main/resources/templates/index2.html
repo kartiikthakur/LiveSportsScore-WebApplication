@@ -8,7 +8,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 </head>
 <body>
-    <div class="musica-cta-area section-padding-100 mt-100 bg-img bg-overlay2" th:style="'background-image: url(img/core-img/index.jpg);'">
+    <div class="musica-cta-area section-padding-100 mt-100 bg-img bg-overlay2" th:style="'background-image: url(img/core-img/index25.jpg);'">
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
                 
             <a class="navbar-brand" href="/index2">
@@ -25,7 +25,7 @@
                      <a class="nav-item nav-link" id="link_team" href="/teams"> Teams Information</a> 
                     <a class="nav-item nav-link" id="link_select" href="/select"> Select Favourite Teams</a>                
                     <a class="nav-item nav-link" id="link_ranking" href="/ranking"> Team Rankings</a> 
-                    <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Scoreboard</a> 
+                    <a class="nav-item nav-link" id="link_scores" href="/scoreboard"> Daily Scoreboard</a> 
                     <a class="nav-item nav-link" id="link_schedule" href="/schedule"> Daily Schedule</a> 
                     <a class="nav-item nav-link" id="link_login" href="/logout"> Logout</a> 
                     <!-- <a class="nav-item nav-link" id="link_logout" href=""> Logout</a>   -->
@@ -37,8 +37,8 @@
                 </nav>
                 
                 <div class="container">
-                <h1 class="text-center">Favourite team details</h1>
-                <table class="table">
+                <h4 class="text-center">Favourite team details</h4>
+                <table class="table table-striped">
                     <thead>
                     <tr>
                       <th scope="col">Team Abbreviation</th>
@@ -49,13 +49,36 @@
                   </thead>
                   
                     <tr th:each="user : ${users}" >
-                     <td th:text="${user.abr}">
-                     <td th:text="${user.name}">
-                    <td> <a th:href="@{~/removeteam?id=} + ${user.id}" th:text="${'Remove Favourite Team'}"> </a> </td>
+                     <td style="font-weight:bold" th:text="${user.abr}">
+                     <td style="font-weight:bold" th:text="${user.name}">
+                    <td style="font-weight:bold"> <a th:href="@{~/removeteam?id=} + ${user.id}" th:text="${'Remove Favourite Team'}"> </a> </td>
                             
                           </tr>
                           </tr>
                     </table>
+
+
+                    <div class="container">
+                      <h4 class="text-center">Today's Scorecard</h4>
+                      <table class="table table-striped">
+                        <thead>
+                        <tr>
+                          <th scope="col">Game ID</th>
+                          <th scope="col">Home Team</th>
+                          <th scope="col">Home Score</th>
+                          <th scope="col">Away Score</th>
+                          <th scope="col">Away Team</th>
+                        </tr>
+                      </thead>
+                      
+                          <tr th:each="scoreDetail,iterStat : ${scoreDetails}" >
+                            <td style="font-weight:bold" th:text="${scoreDetail.get('ID')}">
+                            <td style="font-weight:bold" th:text="${scoreDetail.get('homeTeam')}">
+                            <td style="font-weight:bold" th:text="${scoreDetail.get('homeScore')}">
+                            <td style="font-weight:bold" th:text="${scoreDetail.get('awayScore')}">
+                            <td style="font-weight:bold" th:text="${scoreDetail.get('awayTeam')}">
+                          </tr>
+                        </table>
                           
 	  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>

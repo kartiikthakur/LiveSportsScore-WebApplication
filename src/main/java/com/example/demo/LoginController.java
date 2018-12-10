@@ -15,7 +15,7 @@ import java.util.List;
 import com.example.demo.LoginRepository;
 import javax.transaction.Transactional;
 import org.springframework.stereotype.Service;
-
+import java.util.concurrent.*;
 @Service
 @Transactional
 @Controller
@@ -65,22 +65,19 @@ public ModelAndView handleLogin(
     @GetMapping("/logout")
 	public ModelAndView renderLogout(HttpSession session)
 	{
-		String userID;
-		String userName;
-			try{
-				userID= session.getAttribute("userID").toString();
-				userName= session.getAttribute("userName").toString();
-				ModelAndView logout = new ModelAndView("logoutindex");
-				session.removeAttribute(userID);
-				session.removeAttribute(userName);
-				System.out.println(1);
-				return logout;
-
-			} catch(Exception e){
-				System.out.println(2);
-				return new ModelAndView("redirect:/login");	
-			}
 		
+				String userID= session.getAttribute("userID").toString();
+				String userName= session.getAttribute("userName").toString();
+				ModelAndView logout = new ModelAndView("logoutIndex");
+				session.removeAttribute("userID");
+				session.removeAttribute("userName");
+				try{
+					System.out.println(session.getAttribute("userID").toString());
+				} catch(Exception e){
+					System.out.println("UserID gone");
+				}
+				System.out.println(1);
+				return logout;	
 	}
 
 
