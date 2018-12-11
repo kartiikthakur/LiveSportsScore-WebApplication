@@ -297,12 +297,12 @@ class genericCtrl{
 		ModelAndView scoreboard = new ModelAndView("scoreboard");
 		scoreboard.addObject("name", userName);
 		ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
-		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        // Calendar cal = Calendar.getInstance();
-        // cal.add(Calendar.DATE, -2);    
-		// String date = dateFormat.format(cal.getTime());
-		// String dates = date.replaceAll("/", "");
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181209";
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -2);    
+		String date = dateFormat.format(cal.getTime());
+		String dates = date.replaceAll("/", "");
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate="+ dates;
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
@@ -486,12 +486,12 @@ class genericCtrl{
 				}
 
 				ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
-		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        // Calendar cal = Calendar.getInstance();
-        // cal.add(Calendar.DATE, -1);    
-		// String date = dateFormat.format(cal.getTime());
-		// String dates = date.replaceAll("/", "");
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181209";
+		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        Calendar cal = Calendar.getInstance();
+        cal.add(Calendar.DATE, -2);    
+		String date = dateFormat.format(cal.getTime());
+		String dates = date.replaceAll("/", "");
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate="+dates;
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
