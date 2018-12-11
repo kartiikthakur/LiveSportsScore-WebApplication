@@ -68,14 +68,9 @@ public ModelAndView handleLogin(
 		
 				String userID= session.getAttribute("userID").toString();
 				String userName= session.getAttribute("userName").toString();
-				ModelAndView logout = new ModelAndView("logoutIndex");
+				ModelAndView logout = new ModelAndView("logoutindex");
 				session.removeAttribute("userID");
 				session.removeAttribute("userName");
-				try{
-					System.out.println(session.getAttribute("userID").toString());
-				} catch(Exception e){
-					System.out.println("UserID gone");
-				}
 				return logout;	
 				//return new ModelAndView("redirect:/admin");
 	}

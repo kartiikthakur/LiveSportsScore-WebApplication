@@ -297,17 +297,12 @@ class genericCtrl{
 		ModelAndView scoreboard = new ModelAndView("scoreboard");
 		scoreboard.addObject("name", userName);
 		ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
-		// Date date = DateUtils.addDays(new Date(), -1);
-		// DateFormat dateFormat = new SimpleDateFormat("yyyy-mm-dd");  
-		// String strDate = dateFormat.format(date); 
-		// String dates = strDate.replaceAll("-", "");
-		// System.out.print(date);
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);    
-		String date = dateFormat.format(cal.getTime());
-		String dates = date.replaceAll("/", "");
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=" + dates;
+		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        // Calendar cal = Calendar.getInstance();
+        // cal.add(Calendar.DATE, -2);    
+		// String date = dateFormat.format(cal.getTime());
+		// String dates = date.replaceAll("/", "");
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181209";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
@@ -357,7 +352,7 @@ class genericCtrl{
 			} catch(Exception e){
 				return new ModelAndView("redirect:/login");			
 			}
-		ModelAndView teamInfo = new ModelAndView("teamInfo");
+		ModelAndView teamInfo = new ModelAndView("teaminfo");
 		teamInfo.addObject("name", userName);
 		ArrayList<HashMap<String, String>> gameDetails = new ArrayList<HashMap<String, String>>();
 		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/team_gamelogs.json?team=" + teamID;
@@ -491,12 +486,12 @@ class genericCtrl{
 				}
 
 				ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);    
-		String date = dateFormat.format(cal.getTime());
-		String dates = date.replaceAll("/", "");
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate="+dates;
+		// DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
+        // Calendar cal = Calendar.getInstance();
+        // cal.add(Calendar.DATE, -1);    
+		// String date = dateFormat.format(cal.getTime());
+		// String dates = date.replaceAll("/", "");
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181209";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
@@ -552,12 +547,7 @@ class genericCtrl{
 				 }
 					 
 		ArrayList<HashMap<String, String>> scoreDetails = new ArrayList<HashMap<String, String>>();
-		DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd");
-        Calendar cal = Calendar.getInstance();
-        cal.add(Calendar.DATE, -1);    
-		String date = dateFormat.format(cal.getTime());
-		String dates = date.replaceAll("/", "");
-		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate="+dates;
+		String url = "https://api.mysportsfeeds.com/v1.2/pull/nba/2018-2019-regular/scoreboard.json?fordate=20181209";
 		String encoding = Base64.getEncoder().encodeToString("6ebea4ae-06ba-4b06-a5cd-d589f1:helloworld".getBytes());
         
 		HttpHeaders headers = new HttpHeaders();
